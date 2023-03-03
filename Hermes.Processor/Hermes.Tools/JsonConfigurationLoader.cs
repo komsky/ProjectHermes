@@ -38,14 +38,14 @@ namespace Hermes.Tools
             }
         }
 
-        public static Settings LoadConfiguration()
-        {
-            _logger.Debug("Loading configuration");
-            if (!TryBuildConfigurationStore<ExchangeSettings>(ExchangeSettings.SectionName, out var exchangeSettings)) throw new MissingConfigurationException(section: ExchangeSettings.SectionName);
-            if (!TryBuildConfigurationStore<TradingSettings>(TradingSettings.SectionName, out var tradingSettings)) throw new MissingConfigurationException(section: ExchangeSettings.SectionName);
-            if (!TryBuildConfigurationStore<BacktestingSettings>(BacktestingSettings.SectionName, out var backtestingSettings)) throw new MissingConfigurationException(section: ExchangeSettings.SectionName);
+        //public static Settings LoadConfiguration()
+        //{
+        //    _logger.Debug("Loading configuration");
+        //    if (!TryBuildConfigurationStore<Settings>(ExchangeSettings.SectionName, out var exchangeSettings)) throw new ArgumentNullException(section: ExchangeSettings.SectionName);
+        //    if (!TryBuildConfigurationStore<TradingSettings>(TradingSettings.SectionName, out var tradingSettings)) throw new MissingConfigurationException(section: ExchangeSettings.SectionName);
+        //    if (!TryBuildConfigurationStore<BacktestingSettings>(BacktestingSettings.SectionName, out var backtestingSettings)) throw new MissingConfigurationException(section: ExchangeSettings.SectionName);
 
-            return new Settings { ExchangeSettings = exchangeSettings, TradingSettings = tradingSettings, BacktestingSettings = backtestingSettings };
-        }
+        //    return new Settings { ExchangeSettings = exchangeSettings, TradingSettings = tradingSettings, BacktestingSettings = backtestingSettings };
+        //}
     }
 }

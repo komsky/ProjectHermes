@@ -8,9 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DeepSpeech" Version="0.9.3" />
     <PackageReference Include="Google.Cloud.Speech.V1" Version="3.3.0" />
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="4.4.0" />
     <PackageReference Include="Google.Cloud.TextToSpeech.V1" Version="3.2.0" />
     <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DeepSpeechClient\DeepSpeechClient.csproj" />
+    <ProjectReference Include="..\Hermes.Tools\Hermes.Tools.csproj" />
+    <ProjectReference Include="..\MasterDevs.ChromeDevTools\MasterDevs.ChromeDevTools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

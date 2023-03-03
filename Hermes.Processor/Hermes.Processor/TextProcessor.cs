@@ -1,16 +1,25 @@
-﻿using Iris.Rms.Voice;
+﻿using Hermes.Tools;
+using log4net;
 
 namespace Hermes.Processor
 {
     public class TextProcessor
     {
+        private ILog logger;
+        private Settings settings;
+
+        public TextProcessor(ILog logger, Settings settings)
+        {
+            this.logger = logger;
+            this.settings = settings;
+        }
+
         public async Task Listen()
         {
             try
             {
                 //var pathToFile = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase), "voicerms.json") ;
 
-                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\voicerms.json");
                 var client = new GoogleCloudApiClient();
                 var textResponse = string.Empty;
                 do

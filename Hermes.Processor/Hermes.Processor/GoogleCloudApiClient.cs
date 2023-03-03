@@ -1,15 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Google.Cloud.Speech.V1;
+﻿using Google.Cloud.Speech.V1;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
+using NAudio.Wave;
+using NAudio.CoreAudioApi;
 
-namespace Iris.Rms.Voice
+namespace Hermes.Processor
 {
     public class GoogleCloudApiClient
     {
-        public object AuthExplicit(string projectId, string jsonPath)
+        private bool _isInit;
+        public const string GOOGLE_APPLICATION_CREDENTIALS_DEFAULT_LOCATION = "C:\\TEMP\\GoogleCredentials.json";
+
+        public GoogleCloudApiClient()
+        {
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", GOOGLE_APPLICATION_CREDENTIALS_DEFAULT_LOCATION);
+        }
+        public void AuthExplicit(string projectId = "", string jsonPath = GOOGLE_APPLICATION_CREDENTIALS_DEFAULT_LOCATION)
         {
             // Explicitly use service account credentials by specifying 
             // the private key file.
@@ -21,16 +27,15 @@ namespace Iris.Rms.Voice
             {
                 Console.WriteLine(bucket.Name);
             }
-            return null;
+            _isInit = true;
         }
         public async Task<object> StreamingMicRecognizeAsync(int seconds, Func<string, Task> processResult)
         {
-            //.NET Core NAudio does not have device count
-            //if (NAudio.Wave.WaveInProvider().DeviceCount < 1)
-            //{
-            //    Console.WriteLine("No microphone!");
-            //    return -1;
-            //}
+            if (IsMicrophoneAvailable())
+            {
+                Console.WriteLine("No microphone!");
+                return -1;
+            }
 
             var speech = SpeechClient.Create();
             var streamingCall = speech.StreamingRecognize();
@@ -53,32 +58,42 @@ namespace Iris.Rms.Voice
             // Print responses as they arrive.
             Task printResponses = Task.Run(async () =>
             {
-                while (await streamingCall.ResponseStream.MoveNext(
-                    default(CancellationToken)))
+                bool hasMore = true;
+                while (hasMore)
                 {
-                    foreach (var result in streamingCall.ResponseStream
-                        .Current.Results)
+                    var stream = streamingCall.GetResponseStream();
+                    if (stream != null)
                     {
-                        foreach (var alternative in result.Alternatives)
+                        hasMore = await stream.MoveNextAsync();
+                        foreach (var result in stream.Current.Results)
                         {
-                            Console.WriteLine($"Perhaps {alternative.Transcript}?");
-                            if (result.IsFinal)
+                            foreach (var alternative in result.Alternatives)
                             {
-                                Console.WriteLine($"Pretty sure you've said: {alternative.Transcript}");
-                                processResult(alternative.Transcript);
+                                Console.WriteLine($"Perhaps {alternative.Transcript}?");
+                                if (result.IsFinal)
+                                {
+                                    Console.WriteLine($"Pretty sure you've said: {alternative.Transcript}");
+                                    processResult(alternative.Transcript);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        hasMore = false;
+                    }
+
+
                 }
             });
             // Read from the microphone and stream to API.
             object writeLock = new object();
             bool writeMore = true;
-            var waveIn = new NAudio.Wave.WaveInEvent();
+            var waveIn = new WaveInEvent();
             waveIn.DeviceNumber = 0;
-            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
+            waveIn.WaveFormat = new WaveFormat(16000, 1);
             waveIn.DataAvailable +=
-                (object sender, NAudio.Wave.WaveInEventArgs args) =>
+                (object sender, WaveInEventArgs args) =>
                 {
                     lock (writeLock)
                     {
@@ -100,6 +115,18 @@ namespace Iris.Rms.Voice
             await streamingCall.WriteCompleteAsync();
             await printResponses;
             return 0;
+        }
+
+        private bool IsMicrophoneAvailable()
+        {
+            var enumerator = new MMDeviceEnumerator();
+            var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
+
+            return devices.Any(d =>
+            {
+                using var capture = new WasapiCapture(d);
+                return capture.WaveFormat.Channels > 0;
+            });
         }
     }
 }

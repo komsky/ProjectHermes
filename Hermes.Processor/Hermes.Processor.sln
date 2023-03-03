@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hermes.Processor", "Hermes.Processor\Hermes.Processor.csproj", "{A0363EC2-B68D-4EB7-A72A-BF5D7D4225DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hermes.Processor", "Hermes.Processor\Hermes.Processor.csproj", "{A0363EC2-B68D-4EB7-A72A-BF5D7D4225DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hermes.Tools", "Hermes.Tools\Hermes.Tools.csproj", "{862FA568-01B6-41F8-9C91-8011BA16E55E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hermes.Tools", "Hermes.Tools\Hermes.Tools.csproj", "{862FA568-01B6-41F8-9C91-8011BA16E55E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MasterDevs.ChromeDevTools", "MasterDevs.ChromeDevTools\MasterDevs.ChromeDevTools.csproj", "{509B5DF1-732B-4497-AA1B-171A6070D5BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeepSpeechClient", "DeepSpeechClient\DeepSpeechClient.csproj", "{E6857788-FAC2-443E-AF78-ECF36E2026B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{862FA568-01B6-41F8-9C91-8011BA16E55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{862FA568-01B6-41F8-9C91-8011BA16E55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{862FA568-01B6-41F8-9C91-8011BA16E55E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509B5DF1-732B-4497-AA1B-171A6070D5BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509B5DF1-732B-4497-AA1B-171A6070D5BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509B5DF1-732B-4497-AA1B-171A6070D5BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509B5DF1-732B-4497-AA1B-171A6070D5BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6857788-FAC2-443E-AF78-ECF36E2026B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6857788-FAC2-443E-AF78-ECF36E2026B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6857788-FAC2-443E-AF78-ECF36E2026B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6857788-FAC2-443E-AF78-ECF36E2026B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
