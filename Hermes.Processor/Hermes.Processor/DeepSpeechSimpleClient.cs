@@ -3,17 +3,16 @@ using DeepSpeechClient.Interfaces;
 using DeepSpeechClient;
 using System.Diagnostics;
 using DeepSpeechClient.Models;
-using System.IO;
 using NAudio.CoreAudioApi;
-using System;
-using System.Runtime.InteropServices;
 
 namespace Hermes.Processor
 {
     public class DeepSpeechSimpleClient
     {
         MMDevice _captureDevice;
-        WaveFormat _format;
+        WaveFormat _format; 
+        public string DefaultModelsLocation; 
+        public string ModelVersion => "deepspeech-0.9.3-models";
         public DeepSpeechSimpleClient() 
         {
             // Get the audio capture device to use
@@ -22,12 +21,19 @@ namespace Hermes.Processor
             _format = new WaveFormat(16000, 16, 1);
             Console.WriteLine($"Using {_captureDevice.DeviceFriendlyName} as capture device");
 
+            if (OperatingSystem.IsLinux())
+            {
+                DefaultModelsLocation = @"/home/komsky/AcousticModels";
+            }
+            else
+            {
+                DefaultModelsLocation = @"C:\\TFS\\Hermes\\Hermes.Processor\\DeepSpeechClient\\AcousticModels";
+            }
         }
-        public string DefaultModelsLocation => @"C:\\TFS\\Hermes\\Hermes.Processor\\DeepSpeechClient\\AcousticModels";
-        public string ModelVersion => "deepspeech-0.9.3-models";
+
         public async Task Recognize(string[] args)
         {
-            string model = Path.Combine(DefaultModelsLocation, $"{ModelVersion}.pbmm");
+            string model = Path.Combine(DefaultModelsLocation, $"{ModelVersion}.pbmm"); //tflite - extension for limited resources requires differend loading procedure
             string scorer = Path.Combine(DefaultModelsLocation, $"{ModelVersion}.scorer");
             string audio = Path.Combine(DefaultModelsLocation, $"audio\\combined_respeech.wav"); ;
             var audioFormat = new WaveFormat(16000, 16, 1);
